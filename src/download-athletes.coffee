@@ -17,6 +17,7 @@ if apiKey = process.env.ESPN_API_KEY
       if error?
         console.error(error)
       else
+        process.stdout.write("\rFetched athletes: #{athletes.length}")
         for athlete in body.sports[0].leagues[0].athletes
           delete athlete.links
           athletes.push(athlete)
@@ -24,6 +25,7 @@ if apiKey = process.env.ESPN_API_KEY
         if offset < body.resultsCount
           setTimeout((-> requestAthletes(offset)), 350)
         else
+          console.log('')
           mkdir(path.dirname(outputFile))
           fs.writeFileSync(outputFile, JSON.stringify(athletes, null, 2))
 
