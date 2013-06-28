@@ -3,11 +3,9 @@ path = require 'path'
 request = require 'request'
 mkdir = require('mkdirp').sync
 
-apiKey = process.env.ESPN_API_KEY
-outputFile = path.join(process.cwd(), 'athletes', 'college-football.json')
-if apiKey
+if apiKey = process.env.ESPN_API_KEY
+  outputFile = path.join(process.cwd(), 'athletes', 'college-football.json')
   baseUrl = "http://api.espn.com/v1/sports/football/college-football/athletes?apikey=#{apiKey}"
-
   athletes = []
 
   requestAthletes = (offset=0) ->
@@ -30,6 +28,5 @@ if apiKey
           fs.writeFileSync(outputFile, JSON.stringify(athletes, null, 2))
 
   requestAthletes()
-
 else
   console.log 'Missing required ESPN_API_KEY environment variable'
