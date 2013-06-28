@@ -1,0 +1,19 @@
+{
+  "name": "sports-maps",
+  "version": "0.0.0",
+  "description": "Maps of interesting sports data",
+  "main": "lib/maps.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "request": "~2.21.0",
+    "mkdirp": "~0.3.5"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.3"
+  }
+}
