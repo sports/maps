@@ -5,7 +5,9 @@
   "license": "BSD",
   "dependencies": {
     "request": "~2.21.0",
-    "mkdirp": "~0.3.5"
+    "mkdirp": "~0.3.5",
+    "humanize-plus": "~1.4.1",
+    "underscore": "~1.4.4"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3"
