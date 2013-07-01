@@ -40,7 +40,7 @@ createPoint = ({displayName, height, latLng, weight, birthPlace}, additionalProp
 
 writeMap = (file, features) ->
   mkdir(path.dirname(file))
-  fs.writeFileSync(file, JSON.stringify({type: 'FeaturedCollection', features}, null, 2))
+  fs.writeFileSync(file, JSON.stringify({type: 'FeatureCollection', features}, null, 2))
 
 generateAllAthletesMap = (athletes) ->
   features = []
