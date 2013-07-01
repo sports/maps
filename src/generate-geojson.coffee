@@ -15,10 +15,10 @@ createPoint = ({displayName, height, latLng, weight, birthPlace}, additionalProp
 
   {city, state, country}  = birthPlace
   formattedBirthplace = []
-  formattedBirthplace.push(city) if city
+  formattedBirthplace.push(humanize.titleCase(city.toLowerCase())) if city
   formattedBirthplace.push(state) if state
   formattedBirthplace.push(country) if country and country isnt 'USA'
-  formattedBirthplace = humanize.titleCase(formattedBirthplace.join(', ').toLowerCase())
+  formattedBirthplace = formattedBirthplace.join(', ')
 
   feature =
     type: 'Feature'
