@@ -33,6 +33,7 @@ createPoint = ({displayName, height, latLng, weight, birthPlace}, additionalProp
       'Height': formattedHeight
       'Weight': "#{weight} lbs"
       'Birthplace': formattedBirthplace
+      'marker-symbol': 'america-football'
 
   _.extend(feature.properties, additionalProperties)
   feature
