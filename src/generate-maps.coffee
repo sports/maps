@@ -42,10 +42,9 @@ createPoint = ({displayName, height, latLng, weight, birthPlace}, additionalProp
   _.extend(feature.properties, additionalProperties)
   feature
 
-writeMap = (file, features, options={}) ->
+writeMap = (file, features) ->
   mkdir(path.dirname(file))
-  collection = {features}
-  collection.type = 'FeatureCollection' if options.cluster ? true
+  collection = {features, type: 'FeatureCollection'}
   fs.writeFileSync(file, JSON.stringify(collection, null, 2))
 
 generateAllAthletesMap = (athletes) ->
@@ -61,7 +60,7 @@ generateHeightsMap = (athletes) ->
   features = []
   features.push(createPoint(athlete, 'marker-color': '#9F8170')) for athlete in shortest
   features.push(createPoint(athlete, 'marker-color': '#71BC78')) for athlete in tallest
-  writeMap(path.join(mapsDir, 'college-football-heights.geojson'), features, cluster: false)
+  writeMap(path.join(mapsDir, 'college-football-heights.geojson'), features)
 
 generateWeightsMap = (athletes) ->
   athletes = athletes.filter ({weight}) -> weight > 0
@@ -71,7 +70,7 @@ generateWeightsMap = (athletes) ->
   features = []
   features.push(createPoint(athlete, 'marker-color': '#75B2DD')) for athlete in lightest
   features.push(createPoint(athlete, 'marker-color': '#A45A52')) for athlete in heaviest
-  writeMap(path.join(mapsDir, 'college-football-weights.geojson'), features, cluster: false)
+  writeMap(path.join(mapsDir, 'college-football-weights.geojson'), features)
 
 generateBmiMap = (athletes) ->
   athletes = athletes.filter (athlete) ->
