@@ -1,11 +1,14 @@
+{spawn} = require 'child_process'
 fs = require 'fs'
 path = require 'path'
 request = require 'request'
 mkdir = require('mkdirp').sync
 humanize = require 'humanize-plus'
 _ = require 'underscore'
+async = require 'async'
 
 inputFile = path.join(process.cwd(), 'athletes', 'college-football-with-geocodes.json')
+mapsDir = path.join(process.cwd(), 'maps')
 athletes = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
 
 createPoint = ({displayName, height, latLng, weight, birthPlace}, additionalProperties={}) ->
@@ -47,7 +50,7 @@ writeMap = (file, features, options={}) ->
 generateAllAthletesMap = (athletes) ->
   features = []
   features.push(createPoint(athlete)) for athlete in athletes
-  writeMap(path.join(process.cwd(), 'maps', 'college-football.geojson'), features)
+  writeMap(path.join(mapsDir, 'college-football.geojson'), features)
 
 generateHeightsMap = (athletes) ->
   athletes = athletes.filter ({height}) -> height > 0
@@ -57,7 +60,7 @@ generateHeightsMap = (athletes) ->
   features = []
   features.push(createPoint(athlete, 'marker-color': '#9F8170')) for athlete in shortest
   features.push(createPoint(athlete, 'marker-color': '#71BC78')) for athlete in tallest
-  writeMap(path.join(process.cwd(), 'maps', 'college-football-heights.geojson'), features, cluster: false)
+  writeMap(path.join(mapsDir, 'college-football-heights.geojson'), features, cluster: false)
 
 generateWeightsMap = (athletes) ->
   athletes = athletes.filter ({weight}) -> weight > 0
@@ -67,7 +70,7 @@ generateWeightsMap = (athletes) ->
   features = []
   features.push(createPoint(athlete, 'marker-color': '#75B2DD')) for athlete in lightest
   features.push(createPoint(athlete, 'marker-color': '#A45A52')) for athlete in heaviest
-  writeMap(path.join(process.cwd(), 'maps', 'college-football-weights.geojson'), features, cluster: false)
+  writeMap(path.join(mapsDir, 'college-football-weights.geojson'), features, cluster: false)
 
 generateBmiMap = (athletes) ->
   athletes = athletes.filter (athlete) ->
@@ -80,9 +83,26 @@ generateBmiMap = (athletes) ->
   features = []
   for athlete in athletes
     features.push(createPoint(athlete, {'marker-color': '#F59D92', 'BMI': athlete.bmi}))
-  writeMap(path.join(process.cwd(), 'maps', 'college-football-bmi.geojson'), features)
+  writeMap(path.join(mapsDir, 'college-football-bmi.geojson'), features)
+
+generateTopoJson = ->
+  console.log 'Generating TopoJSON files'
+  commands = []
+  command = require.resolve('.bin/topojson')
+  for map in fs.readdirSync(mapsDir)
+    extension = path.extname(map)
+    continue unless extension is '.geojson'
+    do (map, extension) ->
+      commands.push (callback) ->
+        geoJsonFile = path.join(mapsDir, map)
+        topoJsonFile = path.join(mapsDir, "#{path.basename(map, extension)}.topojson")
+        console.log "Converting #{path.basename(geoJsonFile)} to #{path.basename(topoJsonFile)}"
+        process = spawn(command, ['-p', '-o', topoJsonFile, geoJsonFile], {stdio: 'inherit'})
+        process.on 'exit', -> callback()
+  async.waterfall(commands)
 
 generateAllAthletesMap(athletes)
 generateHeightsMap(athletes)
 generateWeightsMap(athletes)
 generateBmiMap(athletes)
+generateTopoJson()

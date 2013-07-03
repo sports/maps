@@ -8,7 +8,8 @@
     "mkdirp": "~0.3.5",
     "humanize-plus": "~1.4.1",
     "underscore": "~1.4.4",
-    "topojson": "~1.1.4"
+    "topojson": "~1.1.4",
+    "async": "~0.2.9"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3"
