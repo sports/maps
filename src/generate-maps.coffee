@@ -6,6 +6,7 @@ mkdir = require('mkdirp').sync
 humanize = require 'humanize-plus'
 _ = require 'underscore'
 async = require 'async'
+colors = require 'colors'
 
 inputFile = path.join(process.cwd(), 'athletes', 'college-football-with-geocodes.json')
 mapsDir = path.join(process.cwd(), 'maps')
@@ -86,7 +87,7 @@ generateBmiMap = (athletes) ->
   writeMap(path.join(mapsDir, 'college-football-bmi.geojson'), features)
 
 generateTopoJson = ->
-  console.log 'Generating TopoJSON files'
+  console.log 'Generating TopoJSON files'.green
   commands = []
   command = require.resolve('.bin/topojson')
   for map in fs.readdirSync(mapsDir)
@@ -96,7 +97,7 @@ generateTopoJson = ->
       commands.push (callback) ->
         geoJsonFile = path.join(mapsDir, map)
         topoJsonFile = path.join(mapsDir, "#{path.basename(map, extension)}.topojson")
-        console.log "Converting #{path.basename(geoJsonFile)} to #{path.basename(topoJsonFile)}"
+        console.log "Converting #{path.basename(geoJsonFile).cyan} to #{path.basename(topoJsonFile).cyan}"
         process = spawn(command, ['-p', '-o', topoJsonFile, geoJsonFile], {stdio: 'inherit'})
         process.on 'exit', -> callback()
   async.waterfall(commands)

@@ -9,7 +9,8 @@
     "humanize-plus": "~1.4.1",
     "underscore": "~1.4.4",
     "topojson": "~1.1.4",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "colors": "~0.6.0-1"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3"
