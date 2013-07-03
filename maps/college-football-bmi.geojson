@@ -1,5 +1,4 @@
 {
-  "type": "FeatureCollection",
   "features": [
     {
       "type": "Feature",
@@ -142159,5 +142158,6 @@
         "BMI": 31
       }
     }
-  ]
+  ],
+  "type": "FeatureCollection"
 }
